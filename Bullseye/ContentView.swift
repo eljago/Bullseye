@@ -11,13 +11,30 @@ import SwiftUI
 struct ContentView: View {
   
   @State var alertIsVisible: Bool = false
-//  @State var whosThereIsVisible: Bool = false
+  @State var sliderValue: Double = 50.0
   
   var body: some View {
     VStack {
-      Text("Welcome to my first App")
-        .fontWeight(.semibold)
-        .foregroundColor(Color.green)
+      Spacer()
+      
+      // Target row
+      HStack {
+        Text("Put the bullseye as close as you can to:")
+        Text(/*@START_MENU_TOKEN@*/"100"/*@END_MENU_TOKEN@*/)
+      }
+
+      Spacer()
+      
+      // Slider row
+      HStack {
+        Text("1")
+        Slider(value: self.$sliderValue, in: 1...100)
+        Text("100")
+      }
+
+      Spacer()
+      
+      // Button row
       Button(action: {
         print("Button pressed")
         self.alertIsVisible = true
@@ -26,21 +43,37 @@ struct ContentView: View {
       }
       .alert(isPresented: $alertIsVisible) { () ->
         Alert in
-        return Alert(title: Text("Hello There!"), message: Text("This is my first pop-up."), dismissButton: .default(Text("Awesome")))
+        let roundedSliderValue: Int = Int(self.sliderValue.rounded())
+        return Alert(
+          title: Text("Hello There!"),
+          message: Text("The slider's value is \(roundedSliderValue)."),
+          dismissButton: .default(Text("Awesome"))
+        )
       }
-//      Button(action: {
-//        self.whosThereIsVisible = true
-//      }) {
-//        Text("Knock Knock")
-//      }
-//      .alert(isPresented: $whosThereIsVisible) { () ->
-//        Alert in
-//        return Alert(
-//          title: Text("Who's there?"),
-//          message: Text("Little old lady."),
-//          dismissButton: .default(Text("Little old lady who?"))
-//        )
-//      }
+
+      Spacer()
+      
+      // Score row
+      HStack {
+        Button(action: {
+          
+        }) {
+          Text("Start over")
+        }
+        Spacer()
+        Text("Score:")
+        Text("999999")
+        Spacer()
+        Text("Round")
+        Text("999")
+        Spacer()
+        Button(action: {
+          
+        }) {
+          Text("Info")
+        }
+      }
+      .padding(.bottom, 20)
     }
   }
 }

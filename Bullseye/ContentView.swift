@@ -15,6 +15,48 @@ struct ContentView: View {
   @State var target = Int.random(in: 1...100)
   @State var score = 0
   @State var round = 1
+  let midnightBlue = Color.init(red: 0.0/255.0, green: 51.0/255.0, blue: 102.0/255.0)
+  
+  struct LabelStyle: ViewModifier {
+    func body(content: Content) -> some View {
+      return content
+        .modifier(ShadowStyle())
+        .foregroundColor(Color.white)
+        .font(Font.custom("Arial Rounded MT Bold", size: 18.0))
+    }
+  }
+  
+  struct ValueStyle: ViewModifier {
+    func body(content: Content) -> some View {
+      return content
+        .modifier(ShadowStyle())
+        .foregroundColor(Color.yellow)
+        .shadow(color: Color.black, radius: 5.0, x: 2.0, y: 2.0)
+    }
+  }
+  
+  struct ShadowStyle: ViewModifier {
+    func body(content: Content) -> some View {
+      return content
+        .shadow(color: Color.black, radius: 5.0, x: 2.0, y: 2.0)
+    }
+  }
+  
+  struct ButtonLargeTextStyle: ViewModifier {
+    func body(content: Content) -> some View {
+      return content
+        .foregroundColor(Color.black)
+        .font(Font.custom("Arial Rounded MT Bold", size: 18.0))
+    }
+  }
+  
+  struct ButtonSmallTextStyle: ViewModifier {
+    func body(content: Content) -> some View {
+      return content
+        .foregroundColor(Color.black)
+        .font(Font.custom("Arial Rounded MT Bold", size: 12.0))
+    }
+  }
   
   var body: some View {
     VStack {
@@ -22,17 +64,17 @@ struct ContentView: View {
       
       // Target row
       HStack {
-        Text("Put the bullseye as close as you can to:")
-        Text("\(target)")
+        Text("Put the bullseye as close as you can to:").modifier(LabelStyle())
+        Text("\(target)").modifier(ValueStyle())
       }
 
       Spacer()
       
       // Slider row
       HStack {
-        Text("1")
-        Slider(value: $sliderValue, in: 1...100)
-        Text("100")
+        Text("1").modifier(LabelStyle())
+        Slider(value: $sliderValue, in: 1...100).accentColor(Color.green)
+        Text("100").modifier(LabelStyle())
       }
 
       Spacer()
@@ -41,7 +83,7 @@ struct ContentView: View {
       Button(action: {
         self.alertIsVisible = true
       }) {
-        Text("Hit me!")
+        Text("Hit me!").modifier(ButtonLargeTextStyle())
       }
       .alert(isPresented: $alertIsVisible) { () ->
         Alert in
@@ -56,6 +98,7 @@ struct ContentView: View {
           }
         )
       }
+      .background(Image("Button")).modifier(ShadowStyle())
 
       Spacer()
       
@@ -64,24 +107,33 @@ struct ContentView: View {
         Button(action: {
           self.startNewGame()
         }) {
-          Text("Start over")
+          HStack {
+            Image("StartOverIcon")
+            Text("Start over").modifier(ButtonSmallTextStyle())
+          }
         }
+        .background(Image("Button")).modifier(ShadowStyle())
         Spacer()
-        Text("Score:")
-        Text("\(score)")
+        Text("Score:").modifier(LabelStyle())
+        Text("\(score)").modifier(ValueStyle())
         Spacer()
-        Text("Round")
-        Text("\(round)")
+        Text("Round").modifier(LabelStyle())
+        Text("\(round)").modifier(ValueStyle())
         Spacer()
         Button(action: {
           
         }) {
-          Text("Info")
+          HStack {
+            Image("InfoIcon")
+            Text("Info").modifier(ButtonSmallTextStyle())
+          }
         }
+        .background(Image("Button")).modifier(ShadowStyle())
       }
       .padding(.bottom, 20)
     }
     .background(Image("Background"), alignment: .center)
+    .accentColor(midnightBlue)
   }
   
   func sliderValueRounded() -> Int {
